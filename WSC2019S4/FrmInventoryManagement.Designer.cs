@@ -103,6 +103,7 @@
             this.dataGridView.RowTemplate.Height = 24;
             this.dataGridView.Size = new System.Drawing.Size(1382, 725);
             this.dataGridView.TabIndex = 1;
+            this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             // 
             // partName
             // 
@@ -178,6 +179,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmInventoryManagement";
             this.Text = "Inventory Management";
+            this.Load += new System.EventHandler(this.FrmInventoryManagement_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
