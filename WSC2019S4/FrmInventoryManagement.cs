@@ -61,20 +61,49 @@ namespace WSC2019S4
                 dataGridView.Rows.Add(i.PartName, i.TransactionType, i.Date, i.Amount, i.Source, i.Destination, i.ActionEdit, i.ActionRemove, i.OrderItemID, i.PartID, i.OrderID);
                 if (i.TransactionType == "Purchase Order")
                 {
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells["Amount"].Style.BackColor = Color.LightGreen;
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells["Amount"].Style.BackColor = Color.Green;
                 }
             }
         }
 
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.ColumnIndex == 6)
-            {
-                MessageBox.Show("Edit");
-            }
             if (e.ColumnIndex == 7)
             {
-                MessageBox.Show("Remove");
+                int partID = int.Parse(dataGridView.CurrentRow.Cells["PartID"].Value.ToString());
+                double minAmount = db.Parts.SingleOrDefault(m => m.ID == partID).MinimumAmount.Value;
+                double amountSelected = double.Parse(dataGridView.CurrentRow.Cells["Amount"].Value.ToString());
+                double totalAmount = db.OrderItems.Where(m => m.ID == partID).Sum(m => m.Amount).Value;
+                if (totalAmount - amountSelected < minAmount)
+                {
+                    MessageBox.Show("This record can't remove");
+                }
+                else
+                {
+                    int orderItemID = int.Parse(dataGridView.CurrentRow.Cells["OrderItemID"].Value.ToString());
+                    db.OrderItems.Remove(db.OrderItems.SingleOrDefault(m => m.ID == orderItemID));
+                    db.SaveChanges();
+                    FrmInventoryManagement_Load(sender, e);
+                }
+            }
+            if (e.ColumnIndex == 6)
+            {
+                DataGridViewRow row = dataGridView.CurrentRow;
+                if(row.Cells["TransactionType"].Value.ToString().Trim() == "Purchase Order")
+                {
+                    FrmPurchaseOrder frmPurchaseOrder = new FrmPurchaseOrder();
+                    frmPurchaseOrder.Tag = row;
+                    frmPurchaseOrder.isEdit = true;
+                    frmPurchaseOrder.ShowDialog();
+                    FrmInventoryManagement_Load(sender, e);
+                }
+                else
+                {
+                    FrmWarehouseManagement frmWarehouse = new FrmWarehouseManagement();
+                    frmWarehouse.Tag = row;
+                    frmWarehouse.ShowDialog();
+                    FrmInventoryManagement_Load(sender, e);
+                }
             }
         }
     }

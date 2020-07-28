@@ -41,6 +41,9 @@
             this.destination = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.actionEdit = new System.Windows.Forms.DataGridViewLinkColumn();
             this.actionRemove = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.orderItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.partID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.orderID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
@@ -94,7 +97,10 @@
             this.source,
             this.destination,
             this.actionEdit,
-            this.actionRemove});
+            this.actionRemove,
+            this.orderItemID,
+            this.partID,
+            this.orderID});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 28);
             this.dataGridView.Name = "dataGridView";
@@ -169,6 +175,30 @@
             this.actionRemove.Name = "actionRemove";
             this.actionRemove.ReadOnly = true;
             // 
+            // orderItemID
+            // 
+            this.orderItemID.HeaderText = "OrderItemID";
+            this.orderItemID.MinimumWidth = 6;
+            this.orderItemID.Name = "orderItemID";
+            this.orderItemID.ReadOnly = true;
+            this.orderItemID.Visible = false;
+            // 
+            // partID
+            // 
+            this.partID.HeaderText = "PartID";
+            this.partID.MinimumWidth = 6;
+            this.partID.Name = "partID";
+            this.partID.ReadOnly = true;
+            this.partID.Visible = false;
+            // 
+            // orderID
+            // 
+            this.orderID.HeaderText = "OrderID";
+            this.orderID.MinimumWidth = 6;
+            this.orderID.Name = "orderID";
+            this.orderID.ReadOnly = true;
+            this.orderID.Visible = false;
+            // 
             // FrmInventoryManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -203,6 +233,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn destination;
         private System.Windows.Forms.DataGridViewLinkColumn actionEdit;
         private System.Windows.Forms.DataGridViewLinkColumn actionRemove;
+        private System.Windows.Forms.DataGridViewTextBoxColumn orderItemID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn partID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn orderID;
     }
 }
 
