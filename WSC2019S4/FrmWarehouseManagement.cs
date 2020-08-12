@@ -69,7 +69,7 @@ namespace WSC2019S4
 
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            
         }
 
         private void btnSubmit_Click(object sender, EventArgs e)
