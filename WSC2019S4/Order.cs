@@ -20,18 +20,18 @@ namespace WSC2019S4
             this.OrderItems = new HashSet<OrderItem>();
         }
     
-        public int ID { get; set; }
-        public Nullable<int> TransactionTypeID { get; set; }
-        public Nullable<int> SupplierID { get; set; }
-        public Nullable<int> SourceWarehouseID { get; set; }
-        public Nullable<int> DestinationWarehouseID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
+        public long ID { get; set; }
+        public long TransactionTypeID { get; set; }
+        public Nullable<long> SupplierID { get; set; }
+        public Nullable<long> SourceWarehouseID { get; set; }
+        public Nullable<long> DestinationWarehouseID { get; set; }
+        public System.DateTime Date { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderItem> OrderItems { get; set; }
-        public virtual Supplier Supplier { get; set; }
-        public virtual TransactionType TransactionType { get; set; }
         public virtual Warehouse Warehouse { get; set; }
         public virtual Warehouse Warehouse1 { get; set; }
+        public virtual Supplier Supplier { get; set; }
+        public virtual TransactionType TransactionType { get; set; }
     }
 }

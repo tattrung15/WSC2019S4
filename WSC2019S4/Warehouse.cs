@@ -21,7 +21,7 @@ namespace WSC2019S4
             this.Orders1 = new HashSet<Order>();
         }
     
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

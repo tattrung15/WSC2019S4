@@ -46,8 +46,8 @@ namespace WSC2019S4
                     TransactionType = m.Order.TransactionType.Name,
                     Date = m.Order.Date,
                     Amount = m.Amount,
-                    Source = db.Warehouses.Where(x => x.ID == m.Order.SourceWarehouseID).SingleOrDefault().Name,
-                    Destination = db.Warehouses.Where(x => x.ID == m.Order.DestinationWarehouseID).SingleOrDefault().Name,
+                    Source = (db.Warehouses.Where(x => x.ID == m.Order.SourceWarehouseID).SingleOrDefault() != null) ? db.Warehouses.Where(x => x.ID == m.Order.SourceWarehouseID).SingleOrDefault().Name : "",
+                    Destination = (db.Warehouses.Where(x => x.ID == m.Order.DestinationWarehouseID).SingleOrDefault() != null) ? db.Warehouses.Where(x => x.ID == m.Order.DestinationWarehouseID).SingleOrDefault().Name : "",
                     ActionEdit = "Edit",
                     ActionRemove = "Remove",
                     OrderItemID = m.ID,
@@ -73,7 +73,7 @@ namespace WSC2019S4
                 int partID = int.Parse(dataGridView.CurrentRow.Cells["PartID"].Value.ToString());
                 double minAmount = db.Parts.SingleOrDefault(m => m.ID == partID).MinimumAmount.Value;
                 double amountSelected = double.Parse(dataGridView.CurrentRow.Cells["Amount"].Value.ToString());
-                double totalAmount = db.OrderItems.Where(m => m.ID == partID).Sum(m => m.Amount).Value;
+                double totalAmount = double.Parse(db.OrderItems.Where(m => m.PartID == partID).Sum(m => m.Amount).ToString());
                 if (totalAmount - amountSelected < minAmount)
                 {
                     MessageBox.Show("This record can't remove");
@@ -89,7 +89,7 @@ namespace WSC2019S4
             if (e.ColumnIndex == 6)
             {
                 DataGridViewRow row = dataGridView.CurrentRow;
-                if(row.Cells["TransactionType"].Value.ToString().Trim() == "Purchase Order")
+                if (row.Cells["TransactionType"].Value.ToString().Trim() == "Purchase Order")
                 {
                     FrmPurchaseOrder frmPurchaseOrder = new FrmPurchaseOrder();
                     frmPurchaseOrder.Tag = row;
@@ -101,6 +101,7 @@ namespace WSC2019S4
                 {
                     FrmWarehouseManagement frmWarehouse = new FrmWarehouseManagement();
                     frmWarehouse.Tag = row;
+                    frmWarehouse.isEdit = true;
                     frmWarehouse.ShowDialog();
                     FrmInventoryManagement_Load(sender, e);
                 }

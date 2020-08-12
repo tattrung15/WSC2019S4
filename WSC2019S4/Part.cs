@@ -20,11 +20,11 @@ namespace WSC2019S4
             this.OrderItems = new HashSet<OrderItem>();
         }
     
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string Name { get; set; }
-        public Nullable<int> EffectiveLife { get; set; }
-        public Nullable<bool> BatchNumberhasRequired { get; set; }
-        public Nullable<double> MinimumAmount { get; set; }
+        public Nullable<long> EffectiveLife { get; set; }
+        public Nullable<bool> BatchNumberHasRequired { get; set; }
+        public Nullable<long> MinimumAmount { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderItem> OrderItems { get; set; }

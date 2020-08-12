@@ -14,11 +14,11 @@ namespace WSC2019S4
     
     public partial class OrderItem
     {
-        public int ID { get; set; }
-        public Nullable<int> OrderID { get; set; }
-        public Nullable<int> PartID { get; set; }
+        public long ID { get; set; }
+        public long OrderID { get; set; }
+        public long PartID { get; set; }
         public string BatchNumber { get; set; }
-        public Nullable<double> Amount { get; set; }
+        public decimal Amount { get; set; }
     
         public virtual Order Order { get; set; }
         public virtual Part Part { get; set; }

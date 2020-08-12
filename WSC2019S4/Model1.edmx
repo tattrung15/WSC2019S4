@@ -9,79 +9,79 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OrderID" Type="int" />
-          <Property Name="PartID" Type="int" />
-          <Property Name="BatchNumber" Type="nvarchar" MaxLength="100" />
-          <Property Name="Amount" Type="float" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="bigint" Nullable="false" />
+          <Property Name="PartID" Type="bigint" Nullable="false" />
+          <Property Name="BatchNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TransactionTypeID" Type="int" />
-          <Property Name="SupplierID" Type="int" />
-          <Property Name="SourceWarehouseID" Type="int" />
-          <Property Name="DestinationWarehouseID" Type="int" />
-          <Property Name="Date" Type="date" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionTypeID" Type="bigint" Nullable="false" />
+          <Property Name="SupplierID" Type="bigint" />
+          <Property Name="SourceWarehouseID" Type="bigint" />
+          <Property Name="DestinationWarehouseID" Type="bigint" />
+          <Property Name="Date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Parts">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="100" />
-          <Property Name="EffectiveLife" Type="int" />
-          <Property Name="BatchNumberhasRequired" Type="bit" />
-          <Property Name="MinimumAmount" Type="float" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EffectiveLife" Type="bigint" />
+          <Property Name="BatchNumberHasRequired" Type="bit" />
+          <Property Name="MinimumAmount" Type="bigint" />
         </EntityType>
         <EntityType Name="Suppliers">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="TransactionTypes">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Warehouses">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <Association Name="FK__OrderItem__Order__44FF419A">
-          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
-          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+        <Association Name="FK_Headers_Stocks">
+          <End Role="Warehouses" Type="Self.Warehouses" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Orders">
+            <Principal Role="Warehouses">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="OrderItems">
-              <PropertyRef Name="OrderID" />
+            <Dependent Role="Orders">
+              <PropertyRef Name="SourceWarehouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderItem__PartI__45F365D3">
-          <End Role="Parts" Type="Self.Parts" Multiplicity="0..1" />
-          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+        <Association Name="FK_Headers_Stocks1">
+          <End Role="Warehouses" Type="Self.Warehouses" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Parts">
+            <Principal Role="Warehouses">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="OrderItems">
-              <PropertyRef Name="PartID" />
+            <Dependent Role="Orders">
+              <PropertyRef Name="DestinationWarehouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Supplier__403A8C7D">
+        <Association Name="FK_Headers_Suppliers">
           <End Role="Suppliers" Type="Self.Suppliers" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
@@ -93,8 +93,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Transact__3F466844">
-          <End Role="TransactionTypes" Type="Self.TransactionTypes" Multiplicity="0..1" />
+        <Association Name="FK_Headers_TransactionTypes">
+          <End Role="TransactionTypes" Type="Self.TransactionTypes" Multiplicity="1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TransactionTypes">
@@ -105,27 +105,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_Destination">
-          <End Role="Warehouses" Type="Self.Warehouses" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+        <Association Name="FK_OrderItems_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Warehouses">
+            <Principal Role="Orders">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="SourceWarehouseID" />
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_Source">
-          <End Role="Warehouses" Type="Self.Warehouses" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+        <Association Name="FK_Transactions_Parts">
+          <End Role="Parts" Type="Self.Parts" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Warehouses">
+            <Principal Role="Parts">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="SourceWarehouseID" />
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -136,29 +136,29 @@
           <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionTypes" EntityType="Self.TransactionTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Warehouses" EntityType="Self.Warehouses" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__OrderItem__Order__44FF419A" Association="Self.FK__OrderItem__Order__44FF419A">
+          <AssociationSet Name="FK_Headers_Stocks" Association="Self.FK_Headers_Stocks">
+            <End Role="Warehouses" EntitySet="Warehouses" />
             <End Role="Orders" EntitySet="Orders" />
-            <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderItem__PartI__45F365D3" Association="Self.FK__OrderItem__PartI__45F365D3">
-            <End Role="Parts" EntitySet="Parts" />
-            <End Role="OrderItems" EntitySet="OrderItems" />
+          <AssociationSet Name="FK_Headers_Stocks1" Association="Self.FK_Headers_Stocks1">
+            <End Role="Warehouses" EntitySet="Warehouses" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Supplier__403A8C7D" Association="Self.FK__Orders__Supplier__403A8C7D">
+          <AssociationSet Name="FK_Headers_Suppliers" Association="Self.FK_Headers_Suppliers">
             <End Role="Suppliers" EntitySet="Suppliers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Transact__3F466844" Association="Self.FK__Orders__Transact__3F466844">
+          <AssociationSet Name="FK_Headers_TransactionTypes" Association="Self.FK_Headers_TransactionTypes">
             <End Role="TransactionTypes" EntitySet="TransactionTypes" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="fk_Destination" Association="Self.fk_Destination">
-            <End Role="Warehouses" EntitySet="Warehouses" />
+          <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
             <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="fk_Source" Association="Self.fk_Source">
-            <End Role="Warehouses" EntitySet="Warehouses" />
-            <End Role="Orders" EntitySet="Orders" />
+          <AssociationSet Name="FK_Transactions_Parts" Association="Self.FK_Transactions_Parts">
+            <End Role="Parts" EntitySet="Parts" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -170,68 +170,68 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderID" Type="Int32" />
-          <Property Name="PartID" Type="Int32" />
-          <Property Name="BatchNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Amount" Type="Double" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__OrderItem__Order__44FF419A" FromRole="OrderItems" ToRole="Orders" />
-          <NavigationProperty Name="Part" Relationship="Self.FK__OrderItem__PartI__45F365D3" FromRole="OrderItems" ToRole="Parts" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int64" Nullable="false" />
+          <Property Name="PartID" Type="Int64" Nullable="false" />
+          <Property Name="BatchNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderItems_Orders" FromRole="OrderItems" ToRole="Orders" />
+          <NavigationProperty Name="Part" Relationship="Self.FK_Transactions_Parts" FromRole="OrderItems" ToRole="Parts" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TransactionTypeID" Type="Int32" />
-          <Property Name="SupplierID" Type="Int32" />
-          <Property Name="SourceWarehouseID" Type="Int32" />
-          <Property Name="DestinationWarehouseID" Type="Int32" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="OrderItems" Relationship="Self.FK__OrderItem__Order__44FF419A" FromRole="Orders" ToRole="OrderItems" />
-          <NavigationProperty Name="Supplier" Relationship="Self.FK__Orders__Supplier__403A8C7D" FromRole="Orders" ToRole="Suppliers" />
-          <NavigationProperty Name="TransactionType" Relationship="Self.FK__Orders__Transact__3F466844" FromRole="Orders" ToRole="TransactionTypes" />
-          <NavigationProperty Name="Warehouse" Relationship="Self.fk_Destination" FromRole="Orders" ToRole="Warehouses" />
-          <NavigationProperty Name="Warehouse1" Relationship="Self.fk_Source" FromRole="Orders" ToRole="Warehouses" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionTypeID" Type="Int64" Nullable="false" />
+          <Property Name="SupplierID" Type="Int64" />
+          <Property Name="SourceWarehouseID" Type="Int64" />
+          <Property Name="DestinationWarehouseID" Type="Int64" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Orders" FromRole="Orders" ToRole="OrderItems" />
+          <NavigationProperty Name="Warehouse" Relationship="Self.FK_Headers_Stocks" FromRole="Orders" ToRole="Warehouses" />
+          <NavigationProperty Name="Warehouse1" Relationship="Self.FK_Headers_Stocks1" FromRole="Orders" ToRole="Warehouses" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK_Headers_Suppliers" FromRole="Orders" ToRole="Suppliers" />
+          <NavigationProperty Name="TransactionType" Relationship="Self.FK_Headers_TransactionTypes" FromRole="Orders" ToRole="TransactionTypes" />
         </EntityType>
         <EntityType Name="Part">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="EffectiveLife" Type="Int32" />
-          <Property Name="BatchNumberhasRequired" Type="Boolean" />
-          <Property Name="MinimumAmount" Type="Double" />
-          <NavigationProperty Name="OrderItems" Relationship="Self.FK__OrderItem__PartI__45F365D3" FromRole="Parts" ToRole="OrderItems" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EffectiveLife" Type="Int64" />
+          <Property Name="BatchNumberHasRequired" Type="Boolean" />
+          <Property Name="MinimumAmount" Type="Int64" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_Transactions_Parts" FromRole="Parts" ToRole="OrderItems" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Supplier__403A8C7D" FromRole="Suppliers" ToRole="Orders" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Headers_Suppliers" FromRole="Suppliers" ToRole="Orders" />
         </EntityType>
         <EntityType Name="TransactionType">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Transact__3F466844" FromRole="TransactionTypes" ToRole="Orders" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Headers_TransactionTypes" FromRole="TransactionTypes" ToRole="Orders" />
         </EntityType>
         <EntityType Name="Warehouse">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Orders" Relationship="Self.fk_Destination" FromRole="Warehouses" ToRole="Orders" />
-          <NavigationProperty Name="Orders1" Relationship="Self.fk_Source" FromRole="Warehouses" ToRole="Orders" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Headers_Stocks" FromRole="Warehouses" ToRole="Orders" />
+          <NavigationProperty Name="Orders1" Relationship="Self.FK_Headers_Stocks1" FromRole="Warehouses" ToRole="Orders" />
         </EntityType>
-        <Association Name="FK__OrderItem__Order__44FF419A">
-          <End Role="Orders" Type="Self.Order" Multiplicity="0..1" />
+        <Association Name="FK_OrderItems_Orders">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
           <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Orders">
@@ -242,8 +242,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderItem__PartI__45F365D3">
-          <End Role="Parts" Type="Self.Part" Multiplicity="0..1" />
+        <Association Name="FK_Transactions_Parts">
+          <End Role="Parts" Type="Self.Part" Multiplicity="1" />
           <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Parts">
@@ -254,7 +254,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Supplier__403A8C7D">
+        <Association Name="FK_Headers_Stocks">
+          <End Role="Warehouses" Type="Self.Warehouse" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="SourceWarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Headers_Stocks1">
+          <End Role="Warehouses" Type="Self.Warehouse" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="DestinationWarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Headers_Suppliers">
           <End Role="Suppliers" Type="Self.Supplier" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -266,8 +290,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Transact__3F466844">
-          <End Role="TransactionTypes" Type="Self.TransactionType" Multiplicity="0..1" />
+        <Association Name="FK_Headers_TransactionTypes">
+          <End Role="TransactionTypes" Type="Self.TransactionType" Multiplicity="1" />
           <End Role="Orders" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TransactionTypes">
@@ -278,30 +302,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_Destination">
-          <End Role="Warehouses" Type="Self.Warehouse" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Warehouses">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="SourceWarehouseID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_Source">
-          <End Role="Warehouses" Type="Self.Warehouse" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Warehouses">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="SourceWarehouseID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="Session4Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
@@ -309,28 +309,28 @@
           <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
           <EntitySet Name="TransactionTypes" EntityType="Self.TransactionType" />
           <EntitySet Name="Warehouses" EntityType="Self.Warehouse" />
-          <AssociationSet Name="FK__OrderItem__Order__44FF419A" Association="Self.FK__OrderItem__Order__44FF419A">
+          <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderItem__PartI__45F365D3" Association="Self.FK__OrderItem__PartI__45F365D3">
+          <AssociationSet Name="FK_Transactions_Parts" Association="Self.FK_Transactions_Parts">
             <End Role="Parts" EntitySet="Parts" />
             <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Supplier__403A8C7D" Association="Self.FK__Orders__Supplier__403A8C7D">
+          <AssociationSet Name="FK_Headers_Stocks" Association="Self.FK_Headers_Stocks">
+            <End Role="Warehouses" EntitySet="Warehouses" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Headers_Stocks1" Association="Self.FK_Headers_Stocks1">
+            <End Role="Warehouses" EntitySet="Warehouses" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Headers_Suppliers" Association="Self.FK_Headers_Suppliers">
             <End Role="Suppliers" EntitySet="Suppliers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Transact__3F466844" Association="Self.FK__Orders__Transact__3F466844">
+          <AssociationSet Name="FK_Headers_TransactionTypes" Association="Self.FK_Headers_TransactionTypes">
             <End Role="TransactionTypes" EntitySet="TransactionTypes" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="fk_Destination" Association="Self.fk_Destination">
-            <End Role="Warehouses" EntitySet="Warehouses" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="fk_Source" Association="Self.fk_Source">
-            <End Role="Warehouses" EntitySet="Warehouses" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
         </EntityContainer>
@@ -369,7 +369,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="EffectiveLife" ColumnName="EffectiveLife" />
-                <ScalarProperty Name="BatchNumberhasRequired" ColumnName="BatchNumberhasRequired" />
+                <ScalarProperty Name="BatchNumberHasRequired" ColumnName="BatchNumberHasRequired" />
                 <ScalarProperty Name="MinimumAmount" ColumnName="MinimumAmount" />
               </MappingFragment>
             </EntityTypeMapping>

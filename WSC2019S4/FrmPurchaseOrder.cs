@@ -43,8 +43,11 @@ namespace WSC2019S4
                 orderID = int.Parse(row.Cells["OrderID"].Value.ToString());
                 Order order = db.Orders.SingleOrDefault(m => m.ID == orderID);
                 cbSuppliers.SelectedValue = order.SupplierID;
-                cbWarehouse.SelectedValue = order.SourceWarehouseID;
-                date.Value = order.Date.Value;
+                if(order.SourceWarehouseID != null)
+                {
+                    cbWarehouse.SelectedValue = order.SourceWarehouseID;
+                }
+                date.Value = order.Date;
 
                 var list = db.OrderItems.Where(m => m.Order.ID == orderID).Select(x => new
                 {
@@ -118,7 +121,7 @@ namespace WSC2019S4
                 if (!isExists)
                 {
                     int partID = int.Parse(cbPartName.SelectedValue.ToString());
-                    if(db.Parts.SingleOrDefault(m => m.ID == partID && m.BatchNumberhasRequired == true) != null)
+                    if(db.Parts.SingleOrDefault(m => m.ID == partID && m.BatchNumberHasRequired == true) != null)
                     {
                         dataGridView.Rows.Add(cbPartName.Text, txtBatchNumber.Text, txtAmount.Text, "Remove", cbPartName.SelectedValue);
                     }
@@ -143,7 +146,7 @@ namespace WSC2019S4
                     int partID = int.Parse(dataGridView.CurrentRow.Cells["PartID"].Value.ToString());
                     double minAmount = db.Parts.SingleOrDefault(m => m.ID == partID).MinimumAmount.Value;
                     double amountSelected = double.Parse(dataGridView.CurrentRow.Cells["Amount"].Value.ToString());
-                    double totalAmount = db.OrderItems.Where(m => m.PartID == partID).Sum(m => m.Amount).Value;
+                    double totalAmount = double.Parse(db.OrderItems.Where(m => m.PartID == partID).Sum(m => m.Amount).ToString());
                     if (totalAmount - amountSelected < minAmount)
                     {
                         MessageBox.Show("This record can't remove");
@@ -182,26 +185,13 @@ namespace WSC2019S4
 
                 foreach(DataGridViewRow r in dataGridView.Rows)
                 {
-                    try
-                    {
-                        orderItem = new OrderItem()
-                        {
+                      orderItem = new OrderItem()
+                      {
                             OrderID = db.Orders.ToList().LastOrDefault<Order>().ID,
                             PartID = int.Parse(r.Cells["PartID"].Value.ToString()),
-                            BatchNumber = r.Cells["BatchNumber"].Value.ToString(),
-                            Amount = double.Parse(r.Cells["Amount"].Value.ToString())
-                        };
-                    }
-                    catch
-                    {
-                        orderItem = new OrderItem()
-                        {
-                            OrderID = db.Orders.ToList().LastOrDefault<Order>().ID,
-                            PartID = int.Parse(r.Cells["PartID"].Value.ToString()),
-                            BatchNumber = null,
-                            Amount = double.Parse(r.Cells["Amount"].Value.ToString())
-                        };
-                    }
+                            BatchNumber = (r.Cells["BatchNumber"].Value != null) ? r.Cells["BatchNumber"].Value.ToString() : null,
+                            Amount = decimal.Parse(r.Cells["Amount"].Value.ToString())
+                      };
                     db.OrderItems.Add(orderItem);
                     db.SaveChanges();
                 }
