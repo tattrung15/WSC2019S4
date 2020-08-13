@@ -55,6 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmBatchNumbers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmBatchNumbers.Designer.cs">
+      <DependentUpon>FrmBatchNumbers.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmInventoryManagement.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +120,9 @@
     <Compile Include="Warehouse.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FrmBatchNumbers.resx">
+      <DependentUpon>FrmBatchNumbers.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmInventoryManagement.resx">
       <DependentUpon>FrmInventoryManagement.cs</DependentUpon>
     </EmbeddedResource>

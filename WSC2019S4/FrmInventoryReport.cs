@@ -45,6 +45,7 @@ namespace WSC2019S4
         private void cbWarehouse_SelectionChangeCommitted(object sender, EventArgs e)
         {
             long wareHouseID = long.Parse(cbWarehouse.SelectedValue.ToString());
+
             var list = db.Parts.ToList()
                 .Select(m => new {
                     PartName = m.Name,
@@ -62,7 +63,11 @@ namespace WSC2019S4
 
         private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            MessageBox.Show("aa");
+            DataGridViewRow row = dataGridView.CurrentRow;
+            FrmBatchNumbers frmBatchNumbers = new FrmBatchNumbers();
+            frmBatchNumbers.Tag = row;
+            frmBatchNumbers.ShowDialog();
+            FrmInventoryReport_Load(sender, e);
         }
     }
 }
