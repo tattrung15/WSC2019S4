@@ -64,6 +64,7 @@ namespace WSC2019S4
                 {
                     dataGridView.Rows.Add(i.PartName, i.BatchNumber, i.Amount, i.Action, i.PartID);
                     dataGridView.Rows[index].DefaultCellStyle.BackColor = Color.Beige;
+                    index++;
                 }
             }
         }
