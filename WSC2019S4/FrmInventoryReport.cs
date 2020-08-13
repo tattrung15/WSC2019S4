@@ -16,5 +16,14 @@ namespace WSC2019S4
         {
             InitializeComponent();
         }
+
+        Session4Entities db = null;
+        private void FrmInventoryReport_Load(object sender, EventArgs e)
+        {
+            db = new Session4Entities();
+            cbWarehouse.DataSource = db.Warehouses.ToList();
+            cbWarehouse.DisplayMember = "Name";
+            cbWarehouse.ValueMember = "ID";
+        }
     }
 }

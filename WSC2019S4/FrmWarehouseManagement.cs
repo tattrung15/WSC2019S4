@@ -191,7 +191,7 @@ namespace WSC2019S4
                     {
                         OrderID = db.Orders.ToList().LastOrDefault<Order>().ID,
                         PartID = int.Parse(r.Cells["PartID"].Value.ToString()),
-                        BatchNumber = (r.Cells["BatchNumber"].Value != null) ? r.Cells["BatchNumber"].Value.ToString() : null,
+                        BatchNumber = (r.Cells["BatchNumber"].Value != null) ? r.Cells["BatchNumber"].Value.ToString() : "",
                         Amount = decimal.Parse(r.Cells["Amount"].Value.ToString())
                     };
                     db.OrderItems.Add(orderItem);

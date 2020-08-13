@@ -39,7 +39,7 @@ namespace WSC2019S4
         private void FrmInventoryManagement_Load(object sender, EventArgs e)
         {
             db = new Session4Entities();
-            var lst = db.OrderItems.ToList<OrderItem>()
+            var list = db.OrderItems.ToList<OrderItem>()
                 .Select(m => new
                 {
                     PartName = m.Part.Name,
@@ -56,7 +56,7 @@ namespace WSC2019S4
                 }).OrderBy(m => m.Date).ThenBy(m => m.TransactionType).ToList();
             dataGridView.Rows.Clear();
             dataGridView.Columns[2].DefaultCellStyle.Format = "dd/MM/yyyy";
-            foreach (var i in lst)
+            foreach (var i in list)
             {
                 dataGridView.Rows.Add(i.PartName, i.TransactionType, i.Date, i.Amount, i.Source, i.Destination, i.ActionEdit, i.ActionRemove, i.OrderItemID, i.PartID, i.OrderID);
                 if (i.TransactionType == "Purchase Order")
