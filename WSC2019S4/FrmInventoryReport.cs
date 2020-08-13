@@ -24,6 +24,45 @@ namespace WSC2019S4
             cbWarehouse.DataSource = db.Warehouses.ToList();
             cbWarehouse.DisplayMember = "Name";
             cbWarehouse.ValueMember = "ID";
+
+            long wareHouseID = long.Parse(cbWarehouse.SelectedValue.ToString());
+
+            var list = db.Parts.ToList()
+                .Select(m => new { 
+                    PartName = m.Name,
+                    CurrentStock = db.OrderItems.Where(i => i.PartID == m.ID).Count(),
+                    ReceivedStock = db.OrderItems.Where(i => i.PartID == m.ID && i.Order.DestinationWarehouseID == wareHouseID).Count(),
+                    Action = (m.BatchNumberHasRequired == true) ? "View Batch Numbers" : "",
+                    PartID = m.ID
+                });
+            dataGridView.Rows.Clear();
+            foreach(var r in list)
+            {
+                dataGridView.Rows.Add(r.PartName, r.CurrentStock, r.ReceivedStock, r.Action, r.PartID);
+            }
+        }
+
+        private void cbWarehouse_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            long wareHouseID = long.Parse(cbWarehouse.SelectedValue.ToString());
+            var list = db.Parts.ToList()
+                .Select(m => new {
+                    PartName = m.Name,
+                    CurrentStock = db.OrderItems.Where(i => i.PartID == m.ID).Count(),
+                    ReceivedStock = db.OrderItems.Where(i => i.PartID == m.ID && i.Order.DestinationWarehouseID == wareHouseID).Count(),
+                    Action = (m.BatchNumberHasRequired == true) ? "View Batch Numbers" : "",
+                    PartID = m.ID
+                });
+            dataGridView.Rows.Clear();
+            foreach (var r in list)
+            {
+                dataGridView.Rows.Add(r.PartName, r.CurrentStock, r.ReceivedStock, r.Action, r.PartID);
+            }
+        }
+
+        private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            MessageBox.Show("aa");
         }
     }
 }

@@ -66,7 +66,7 @@ namespace WSC2019S4
             }
         }
 
-        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 7)
             {
