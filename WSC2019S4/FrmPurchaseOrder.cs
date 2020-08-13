@@ -106,7 +106,8 @@ namespace WSC2019S4
                 {
                     try
                     {
-                        if (txtBatchNumber.Text.Trim() == r.Cells["BatchNumber"].Value.ToString())
+                        string cellBatchNumber = (r.Cells["BatchNumber"].Value != null) ? r.Cells["BatchNumber"].Value.ToString() : "";
+                        if (txtBatchNumber.Text.Trim() == cellBatchNumber)
                         {
                             MessageBox.Show("Batch Number is exists!");
                             isExists = true;
