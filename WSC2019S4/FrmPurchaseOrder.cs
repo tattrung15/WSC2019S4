@@ -143,66 +143,78 @@ namespace WSC2019S4
         {
             if (e.ColumnIndex == 3)
             {
-                if (isEdit && dataGridView.CurrentRow.DefaultCellStyle.BackColor == Color.Beige)
+                DialogResult dialogResult = MessageBox.Show("Are you sure?", "", MessageBoxButtons.YesNo);
+
+                if(dialogResult == DialogResult.Yes)
                 {
-                    int partID = int.Parse(dataGridView.CurrentRow.Cells["PartID"].Value.ToString());
-                    double minAmount = db.Parts.SingleOrDefault(m => m.ID == partID).MinimumAmount.Value;
-                    double amountSelected = double.Parse(dataGridView.CurrentRow.Cells["Amount"].Value.ToString());
-                    double totalAmount = double.Parse(db.OrderItems.Where(m => m.PartID == partID).Sum(m => m.Amount).ToString());
-                    if (totalAmount - amountSelected < minAmount)
+                    if (isEdit && dataGridView.CurrentRow.DefaultCellStyle.BackColor == Color.Beige)
                     {
-                        MessageBox.Show("This record can't remove");
-                        return;
+                        int partID = int.Parse(dataGridView.CurrentRow.Cells["PartID"].Value.ToString());
+                        double minAmount = db.Parts.SingleOrDefault(m => m.ID == partID).MinimumAmount.Value;
+                        double amountSelected = double.Parse(dataGridView.CurrentRow.Cells["Amount"].Value.ToString());
+                        double totalAmount = double.Parse(db.OrderItems.Where(m => m.PartID == partID).Sum(m => m.Amount).ToString());
+                        if (totalAmount - amountSelected < minAmount)
+                        {
+                            MessageBox.Show("This record can't remove");
+                            return;
+                        }
+                        else
+                        {
+                            dataGridView.Rows.Remove(dataGridView.CurrentRow);
+                            MessageBox.Show("Done");
+                        }
                     }
                     else
                     {
                         dataGridView.Rows.Remove(dataGridView.CurrentRow);
+                        MessageBox.Show("Done");
                     }
-                }
-                else
-                {
-                    dataGridView.Rows.Remove(dataGridView.CurrentRow);
                 }
             }
         }
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            if(dataGridView.Rows.Count > 0)
+            DialogResult dialogResult = MessageBox.Show("Are you sure?", "", MessageBoxButtons.YesNo);
+
+            if (dialogResult == DialogResult.Yes)
             {
-                Order order = new Order()
+                if (dataGridView.Rows.Count > 0)
                 {
-                    TransactionTypeID = 1,
-                    SupplierID = int.Parse(cbSuppliers.SelectedValue.ToString()),
-                    SourceWarehouseID = int.Parse(cbWarehouse.SelectedValue.ToString()),
-                    DestinationWarehouseID = int.Parse(cbWarehouse.SelectedValue.ToString()),
-                    Date = date.Value
-                };
-                db.Orders.Add(order);
-                db.SaveChanges();
+                    Order order = new Order()
+                    {
+                        TransactionTypeID = 1,
+                        SupplierID = int.Parse(cbSuppliers.SelectedValue.ToString()),
+                        SourceWarehouseID = int.Parse(cbWarehouse.SelectedValue.ToString()),
+                        DestinationWarehouseID = int.Parse(cbWarehouse.SelectedValue.ToString()),
+                        Date = date.Value
+                    };
+                    db.Orders.Add(order);
+                    db.SaveChanges();
 
-                OrderItem orderItem = new OrderItem();
-                db.Database.ExecuteSqlCommand("DELETE dbo.OrderItems WHERE OrderID = @OrderID", new SqlParameter("@OrderID", orderID));
-                db.SaveChanges();
+                    OrderItem orderItem = new OrderItem();
+                    db.Database.ExecuteSqlCommand("DELETE dbo.OrderItems WHERE OrderID = @OrderID", new SqlParameter("@OrderID", orderID));
+                    db.SaveChanges();
 
-                foreach(DataGridViewRow r in dataGridView.Rows)
-                {
-                      orderItem = new OrderItem()
-                      {
+                    foreach (DataGridViewRow r in dataGridView.Rows)
+                    {
+                        orderItem = new OrderItem()
+                        {
                             OrderID = db.Orders.ToList().LastOrDefault<Order>().ID,
                             PartID = int.Parse(r.Cells["PartID"].Value.ToString()),
                             BatchNumber = (r.Cells["BatchNumber"].Value != null) ? r.Cells["BatchNumber"].Value.ToString() : "",
                             Amount = decimal.Parse(r.Cells["Amount"].Value.ToString())
-                      };
-                    db.OrderItems.Add(orderItem);
-                    db.SaveChanges();
+                        };
+                        db.OrderItems.Add(orderItem);
+                        db.SaveChanges();
+                    }
+                    MessageBox.Show("Submit success !");
+                    this.Close();
                 }
-                MessageBox.Show("Submit success !");
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("At least one part needs to be added");
+                else
+                {
+                    MessageBox.Show("At least one part needs to be added");
+                }
             }
         }
 

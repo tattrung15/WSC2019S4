@@ -171,6 +171,7 @@
             // 
             this.actionRemove.FillWeight = 85.32843F;
             this.actionRemove.HeaderText = "Action";
+            this.actionRemove.LinkColor = System.Drawing.Color.Red;
             this.actionRemove.MinimumWidth = 6;
             this.actionRemove.Name = "actionRemove";
             this.actionRemove.ReadOnly = true;

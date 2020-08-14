@@ -70,20 +70,26 @@ namespace WSC2019S4
         {
             if (e.ColumnIndex == 7)
             {
-                int partID = int.Parse(dataGridView.CurrentRow.Cells["PartID"].Value.ToString());
-                double minAmount = db.Parts.SingleOrDefault(m => m.ID == partID).MinimumAmount.Value;
-                double amountSelected = double.Parse(dataGridView.CurrentRow.Cells["Amount"].Value.ToString());
-                double totalAmount = double.Parse(db.OrderItems.Where(m => m.PartID == partID).Sum(m => m.Amount).ToString());
-                if (totalAmount - amountSelected < minAmount)
+                DialogResult dialogResult = MessageBox.Show("Are you sure?", "", MessageBoxButtons.YesNo);
+                
+                if(dialogResult == DialogResult.Yes)
                 {
-                    MessageBox.Show("This record can't remove");
-                }
-                else
-                {
-                    int orderItemID = int.Parse(dataGridView.CurrentRow.Cells["OrderItemID"].Value.ToString());
-                    db.OrderItems.Remove(db.OrderItems.SingleOrDefault(m => m.ID == orderItemID));
-                    db.SaveChanges();
-                    FrmInventoryManagement_Load(sender, e);
+                    int partID = int.Parse(dataGridView.CurrentRow.Cells["PartID"].Value.ToString());
+                    double minAmount = db.Parts.SingleOrDefault(m => m.ID == partID).MinimumAmount.Value;
+                    double amountSelected = double.Parse(dataGridView.CurrentRow.Cells["Amount"].Value.ToString());
+                    double totalAmount = double.Parse(db.OrderItems.Where(m => m.PartID == partID).Sum(m => m.Amount).ToString());
+                    if (totalAmount - amountSelected < minAmount)
+                    {
+                        MessageBox.Show("This record can't remove");
+                    }
+                    else
+                    {
+                        int orderItemID = int.Parse(dataGridView.CurrentRow.Cells["OrderItemID"].Value.ToString());
+                        db.OrderItems.Remove(db.OrderItems.SingleOrDefault(m => m.ID == orderItemID));
+                        db.SaveChanges();
+                        FrmInventoryManagement_Load(sender, e);
+                        MessageBox.Show("Done");
+                    }
                 }
             }
             if (e.ColumnIndex == 6)
